@@ -41,7 +41,7 @@ class PMSTesting(unittest.TestCase):
 # This testing checks the delete_data() function in passwordgen is deleting password with respect to a UserID or not!!   
     def test_delete_data(self):
         self.assertTrue(delete_data,self.delete)
-
+# This teardown function will help the test code to be clean and flexible after all test cases are executed.
     def tearDown(self):
         pass
 

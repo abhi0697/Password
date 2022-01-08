@@ -19,7 +19,7 @@ print("Please login here to create a password!!!"+"\n")
 lguser=input("Enter your username! "+"\n")
 lgpass=input("Enter your password! "+"\n")
 valid=False
-if lguser=='singh' and lgpass=='hello':
+if lguser=='admin' and lgpass=='admin':
     print("login Successfull!!"+"\n")
     print("☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺"+"\n")
     valid=True
@@ -72,25 +72,21 @@ def validate(password):
                     count=1
                     print("Please enter at least password of 8 characters!!"+"\n")
 
-                if number is True:
-                    if any(str.isdigit(password) for password in password) != number:
-                        count=1
-                        print("Please enter at least one numerical in your password!!"+"\n")
+                if number is True & any(str.isdigit(password) for password in password) != number:
+                    count=1
+                    print("Please enter at least one numerical in your password!!"+"\n")
 
-                if uppercaseletter is True:
-                    if any(password.isupper() for password in password) != uppercaseletter:
-                        count=1
-                        print("Please enter at least one uppercase letter in your password!!"+"\n")
+                if uppercaseletter is True & any(password.isupper() for password in password) != uppercaseletter:
+                    count=1
+                    print("Please enter at least one uppercase letter in your password!!"+"\n")
 
-                if lowercaseletter is True:
-                    if any(password.islower() for password in password) != lowercaseletter:
-                        count=1
-                        print("Please enter at least one lowercase letter in your password!!"+"\n")
+                if lowercaseletter is True & any(password.islower() for password in password) != lowercaseletter:
+                    count=1
+                    print("Please enter at least one lowercase letter in your password!!"+"\n")
 
-                if spcl_char is True:
-                    if any(char in symbols for char in password) != True:
-                        count=1
-                        print("Please enter at least one special character in your password!!"+"\n")
+                if spcl_char is True & any(char in symbols for char in password) != True:
+                    count=1
+                    print("Please enter at least one special character in your password!!"+"\n")
                         
                 if not any(char in all_article for char in password):
                     count=1
@@ -144,12 +140,12 @@ def hashing(plaintext):
         print(e)
 
 # Generating the number of random password with the specified length by the user
-@app.route('/generate_password', methods=['POST'])
+@app.route('/generate_passw', methods=['POST'])
 def password():
     try:
-        for a in range(0,num_pass):
+        for _ in range(0,num_pass):
             password = ''
-            for i in range(0,pswl):
+            for _ in range(0,pswl):
                 password += random.choice(articles)
             # print(password)
             if validate(password)==0:
@@ -168,9 +164,9 @@ for i in range(num_pass):
 @app.route('/get_password', methods=['GET'])
 def read_data():
     try:
-        show_password="Select * from users;"
+        show_passw="Select * from users;"
         cursor=connection.cursor()
-        cursor.execute(show_password)
+        cursor.execute(show_passw)
         records = cursor.fetchall()
         print("Total number of rows in table: ", cursor.rowcount)
         print("\nPrinting each row"+"\n")
@@ -184,11 +180,11 @@ def read_data():
 def delete_data(del_id):
     try:
         val=del_id
-        delete_password="Delete from users where userid=%s;"
+        delete_passw="Delete from users where userid=%s;"
         cursor=connection.cursor()
-        cursor.execute(delete_password,(val,))
+        cursor.execute(delete_passw,(val,))
         connection.commit()
-        print("The password of id "+val+" is deleted!!!")
+        print("The password of UserID "+val+" has been deleted!!!")
     except Exception as e:
         print(e)
 
@@ -213,4 +209,4 @@ else:
 if valid==True:
     def main():
         if __name__ == '__main__':
-             main()
+             app.run()

@@ -28,13 +28,14 @@ else:
     print("▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬")
     exit()
 
+Db_pass=input("Please enter the MySQL Server password to connect to the database."+"\n")
 
 # MySQL connection
 try:
     connection = mysql.connector.connect(host='localhost',
                                          database='PMS',
                                          user='singh',
-                                         password='7602')
+                                         password=Db_pass)
     
     if connection.is_connected():
         db_Info = connection.get_server_info()
@@ -45,6 +46,7 @@ try:
     print("You're connected to database: ", record)
 except Error as e:
     print("Error while connecting to MySQL", e)
+    exit()
 
 # list of all the characters that could be used in generating a password
 articles = list('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*()}{[]<>,/\.')
@@ -59,6 +61,7 @@ def validate(password):
     try:
         with open(os.path.join(os.path.dirname(__file__), "password_schema.json"), 'r') as json_data:
                 policy = load(json_data)
+                policy_backup=policy
                 # print(policy)
                 count=0
                 spcl_char = policy['symbol']

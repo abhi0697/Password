@@ -1,4 +1,4 @@
-import random
+import secrets
 from validation import validate
 from AES_encryption import aes_cbc_encrypt
 from json import load
@@ -77,7 +77,7 @@ def password():
         for _ in range(0,num_pass):
             password = ''
             for _ in range(0,pswl):
-                password += random.choice(all_article)
+                password += secrets.choice(all_article)
 # Validating the password by callinf the validate function from validation.py and if the validation passes
 # then insert the password into database else not
             if validate(password)==0:

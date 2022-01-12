@@ -1,10 +1,11 @@
 import random
 from validation import validate
-from DES_encryption import des_cbc_encrypt
+from AES_encryption import aes_cbc_encrypt
 from json import load
 import os
 import jwt
 from flask import Flask, request
+
 
 key=open('Secret_key.txt','r')
 key=key.read().encode('utf8')
@@ -80,7 +81,7 @@ def password():
 # Validating the password by callinf the validate function from validation.py and if the validation passes
 # then insert the password into database else not
             if validate(password)==0:
-                insert_data(des_cbc_encrypt(key,password))
+                insert_data(aes_cbc_encrypt(key,password))
                 print("Great!! Your password fulfills the policy!!!"+"\n")
             else:
                 print("Please generate the password again with all validations!!"+"\n")

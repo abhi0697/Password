@@ -109,7 +109,7 @@ def delete_data(user_id):
         cursor=connection.cursor()
         cursor.execute(delete_passw,(val,))
         connection.commit()
-        return ("The password of UserID "+val+" has been deleted!!!"+"\n\n")
+        return "The password of UserID "+val+" has been deleted!!!"+"\n
     except Exception as e:
         print(e)
 

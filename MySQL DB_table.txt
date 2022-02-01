@@ -4,7 +4,7 @@ Use PMS;
 
 Create table users(
 id int Auto_increment,
-password varchar(255) NOT NULL,
+password varbinary(255) NOT NULL,
 Primary key(id));
 
 

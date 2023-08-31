@@ -4,7 +4,10 @@ from decouple import config
 import os
 import jwt
 import secrets
+import json
 from flask import Flask, request, jsonify
+from dotenv import load_dotenv
+load_dotenv()
 
 key=open('Secret_key.txt','r')
 key=key.read().encode('utf8')
@@ -12,12 +15,17 @@ app = Flask(__name__)
 SECRET_KEY=config('Key')
 
 #user login to create password 
-@app.route('/login', methods=['POST'])
+#References: https://flask-login.readthedocs.io/en/latest/#flask_login.LoginManager
+@app.route("/")
+def hello():
+    return "Welcome to PMS!"
+
+@app.route('/login', methods=['POST','GET'])
 def login():
-    username=request.get_json()['username']
-    password=request.get_json()['password']
-    user1=config('env_username')
-    passw1=config('env_password')
+    username=request.args.get("username")
+    password=request.args.get("password")
+    user1=os.getenv("env_username")
+    passw1=os.getenv("env_password")
     if username == user1 and password == passw1:
         return token(username)
     return "Invalid Credentials"
@@ -97,22 +105,35 @@ def read_data():
         return jsonify({'UserID': fetched_data})
     except Exception as e:
         print(e)
-
-
+        
 # Function to delete the encrypted password using the UserID
 @app.route('/delete_passw/<user_id>', methods=["DELETE"])
 def delete_data(user_id):
     try:
-        # val = request.get_json()
         val=user_id
         delete_passw="Delete from users where userid=%s;"
         cursor=connection.cursor()
         cursor.execute(delete_passw,(val,))
         connection.commit()
-        return "The password of UserID "+val+" has been deleted!!!"+"\n
+        return ("The password of UserID "+val+" has been deleted!!!"+"\n\n")
     except Exception as e:
         print(e)
+        
 
+# Updating the password schema with the policy update json file and 
+# notify the users to generate passwords accordingly.
+@app.route('/update_policy',methods=['PUT'])
+def update_policy():
+    try:
+        with open(os.path.join(os.path.dirname(__file__), "policy_update.json"), 'r') as json_data:
+                policy_update = load(json_data)
+        with open("password_schema.json", "w") as outfile:
+            json.dump(policy_update, outfile)
+        return "Policy is updated!! Please change your passwords accordingly.!!"
+    except Exception as e:
+        print(e)
+        
+        
 #If the legitimate user is able to login then check for password validation after its generation.
 if __name__ == '__main__':
     app.run(debug=True)
